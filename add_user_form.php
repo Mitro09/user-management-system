@@ -1,27 +1,33 @@
 <?php 
-if($_SERVER['REQUEST_METHOD']==='POST'){
-   $user = UserFactory::fromArray($_POST);
-   $userValidation = new UserValidation($user);
-   
-   $userValidation->validate();
 
-   if($userValidation->isValid()){
-       $userModel = new UserModel();
-       $userModel->create($user);
-
-       // mail($user->getEmail(),"ti sei iscritto tu ?");
-       // redirect alla conferma dell'iscrizione "grazie per esserti iscritto "
-       // user_registration_success.php
-       
-   }
-
-   $firstNameValidationResult = $userValidation->firstNameValid;
-
-}
+//require "autoload.php";
+require __DIR__."/src/model/UserModel.php";
+require __DIR__."/src/entity/User.php";
+require __DIR__."/src/validator/UserValidation.php";
+require __DIR__."/src/validator/ValidationResult.php";
 
 if($_SERVER['REQUEST_METHOD']==='GET'){
+    $firstName = '';
+    $firstNameClass = '';
+    $firstNameClassMessage = '';
+    $firstNameMessage = '';
 
 }
+
+if($_SERVER['REQUEST_METHOD']==='POST'){
+    $user = new User($_POST['firstName'],$_POST['lastName'],$_POST['email'],$_POST['birthday']);
+    $userValidation = new UserValidation($user);
+    $firstNameValidation = $userValidation->getError('firstName');
+   
+    $firstName = $user->getFirstName();
+    $firstNameClass = $firstNameValidation->getIsValid() ? 'is-valid' : 'is-invalid';
+    $firstNameClassMessage = $firstNameValidation->getIsValid() ? 'valid-feedback' : 'invalid-feedback';
+    $firstNameMessage = $firstNameValidation->getMessage();
+  
+
+   
+   
+   }
 
 ?>
 <!DOCTYPE html>
@@ -43,9 +49,13 @@ if($_SERVER['REQUEST_METHOD']==='GET'){
             <div class="form-group">
                <label for="">Nome</label>
                <!-- is-invalid  -->
-               <input class="form-control"  name="firstName"  type="text">
-               <div class="invalid-feedback">
-                   il nome è obbligatorio
+               <input value="<?=$firstName?>" 
+                      class="form-control <?=$firstNameClass?>"  
+                      name="firstName"  
+                      type="text"
+                >
+               <div class="<?=$firstNameClassMessage?>">
+                   <?=$firstNameMessage?>
                </div> 
             </div>
             <div class="form-group">
