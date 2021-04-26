@@ -5,12 +5,13 @@ require __DIR__."/src/model/UserModel.php";
 require __DIR__."/src/entity/User.php";
 require __DIR__."/src/validator/UserValidation.php";
 require __DIR__."/src/validator/ValidationResult.php";
+require __DIR__."/src/validator/bootstrap/ValidationFormHelper.php";
 
 if($_SERVER['REQUEST_METHOD']==='GET'){
-    $firstName = '';
-    $firstNameClass = '';
-    $firstNameClassMessage = '';
-    $firstNameMessage = '';
+
+    list($firstName,$firstNameClass,$firstNameClassMessage,$firstNameMessage) = ValidationFormHelper::getDefault();
+    list($lastName,$lastNameClass,$lastNameClassMessage,$lastNameMessage) = ValidationFormHelper::getDefault();
+    list($email,$emailClass,$emailClassMessage,$emailMessage) = ValidationFormHelper::getDefault();
 
 }
 
@@ -18,12 +19,28 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     $user = new User($_POST['firstName'],$_POST['lastName'],$_POST['email'],$_POST['birthday']);
     $userValidation = new UserValidation($user);
     $firstNameValidation = $userValidation->getError('firstName');
+    $lastNameValidation = $userValidation->getError('lastName');
+    $emailValidation = $userValidation->getError('email');
+
+    list($firstName,$firstNameClass,$firstNameClassMessage,$firstNameMessage) = ValidationFormHelper::getValidationClass($firstNameValidation);
+    list($lastName,$lastNameClass,$lastNameClassMessage,$lastNameMessage) = ValidationFormHelper::getValidationClass($lastNameValidation);
+    list($email,$emailClass,$emailClassMessage,$emailMessage) = ValidationFormHelper::getValidationClass($emailValidation);
    
-    $firstName = $user->getFirstName();
+    /*$firstName = $user->getFirstName();
+    $lastName = $user->getLastName();
+    $email = $user->getEmail();
+
     $firstNameClass = $firstNameValidation->getIsValid() ? 'is-valid' : 'is-invalid';
+    $lastNameClass = $lastNameValidation->getIsValid() ? 'is-valid' : 'is-invalid';
+    $emailClass = $emailValidation->getIsValid() ? 'is-valid' : 'is-invalid';
+
     $firstNameClassMessage = $firstNameValidation->getIsValid() ? 'valid-feedback' : 'invalid-feedback';
+    $lastNameClassMessage = $lastNameValidation->getIsValid() ? 'valid-feedback' : 'invalid-feedback';
+    $emailClassMessage = $emailValidation->getIsValid() ? 'valid-feedback' : 'invalid-feedback';
+
     $firstNameMessage = $firstNameValidation->getMessage();
-  
+    $lastNameMessage = $lastNameValidation->getMessage();
+    $emailMessage = $emailValidation->getMessage();*/
 
    
    
@@ -60,19 +77,24 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             </div>
             <div class="form-group">
                 <label for="">Cognome</label>
-                <input class="form-control" name="lastName" type="text">
-                <div class="invalid-feedback">
-                    il cognome è obbligatorio
+                <input value="<?=$lastName?>"
+                       class="form-control <?=$lastNameClass?>" 
+                       name="lastName" 
+                       type="text"
+                >
+                <div class="<?=$lastNameClassMessage?>">
+                    <?=$lastNameMessage?>
                 </div> 
              </div>
              <div class="form-group">
                 <label for="">email</label>
-                <input class="form-control"  name="email" type="text"> 
-                <div class="invalid-feedback">
-                    email errata
-                </div>
-                <div class="invalid-feedback">
-                    email obbligatoria
+                <input value="<?=$email?>"
+                       class="form-control <?=$emailClass?>"  
+                       name="email" 
+                       type="text"
+                > 
+                <div class="<?=$emailClassMessage?>">
+                    <?=$emailMessage?>
                 </div>
              </div>
              <div class="form-group">
