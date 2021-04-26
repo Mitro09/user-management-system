@@ -12,6 +12,7 @@ if($_SERVER['REQUEST_METHOD']==='GET'){
     list($firstName,$firstNameClass,$firstNameClassMessage,$firstNameMessage) = ValidationFormHelper::getDefault();
     list($lastName,$lastNameClass,$lastNameClassMessage,$lastNameMessage) = ValidationFormHelper::getDefault();
     list($email,$emailClass,$emailClassMessage,$emailMessage) = ValidationFormHelper::getDefault();
+    list($birthday,$birthdayClass,$birthdayClassMessage,$birthdayMessage) = ValidationFormHelper::getDefault();
 
 }
 
@@ -21,10 +22,12 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     $firstNameValidation = $userValidation->getError('firstName');
     $lastNameValidation = $userValidation->getError('lastName');
     $emailValidation = $userValidation->getError('email');
+    $birthdayValidation = $userValidation->getError('birthday');
 
     list($firstName,$firstNameClass,$firstNameClassMessage,$firstNameMessage) = ValidationFormHelper::getValidationClass($firstNameValidation);
     list($lastName,$lastNameClass,$lastNameClassMessage,$lastNameMessage) = ValidationFormHelper::getValidationClass($lastNameValidation);
     list($email,$emailClass,$emailClassMessage,$emailMessage) = ValidationFormHelper::getValidationClass($emailValidation);
+    list($birthday,$birthdayClass,$birthdayClassMessage,$birthdayMessage) = ValidationFormHelper::getValidationClass($birthdayValidation);
    
     /*$firstName = $user->getFirstName();
     $lastName = $user->getLastName();
@@ -99,7 +102,14 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
              </div>
              <div class="form-group">
                 <label for="">data di nascita</label>
-                <input class="form-control" name="birthday" type="date">
+                <input value="<?=$birthday?>"
+                       class="form-control <?=$birthdayClass?>" 
+                       name="birthday" 
+                       type="date"
+                >
+                <div class="<?=$birthdayClassMessage?>">
+                    <?=$birthdayMessage?>
+                </div>
              </div>
              <button class="btn btn-primary mt-3" type="submit">Aggiungi</button>
         </form>

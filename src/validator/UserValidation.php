@@ -12,6 +12,9 @@ class UserValidation {
     public const EMAIL_ERROR_REQUIRED_MSG = 'Email obbligatoria';
     public const EMAIL_ERROR_MSG = 'Email errata';
 
+    public const DATE_ERROR_NONE_MSG = 'La data è corretta';
+    public const DATE_ERROR_REQUIRED_MSG = 'La data è obbligatoria';
+
 
     private $user;
     private $errors = [];
@@ -20,6 +23,7 @@ class UserValidation {
     public $firstNameResult;
     public $lastNameResult;
     public $emailResult;
+    public $birthdayResult;
 
     public function __construct(User $user) {
         $this->user = $user;
@@ -34,11 +38,14 @@ class UserValidation {
         $this->errors['lastName'] = $this->lastNameResult;
         $this->emailResult = $this->validateEmail();
         $this->errors['email'] = $this->emailResult;
+        $this->birthdayResult = $this->validateBirthday();
+        $this->errors['birthday'] = $this->birthdayResult;
         
 
         if(!$this->firstNameResult->getIsValid() && 
            !$this->lastNameResult->getIsValid()  &&
-           !$this->emailResult->getIsValid()){
+           !$this->emailResult->getIsValid()     &&
+           !$this->birthdayResult->getIsValid()){
                 $this->isValid = false;   
         }
 
@@ -81,6 +88,17 @@ class UserValidation {
         return $validationResult;
     }
 
+    private function validateBirthday():?ValidationResult
+    {
+        $birthday = $this->user->getBirthday();
+        if(empty($birthday)){
+            $validationResult = new ValidationResult(self::DATE_ERROR_REQUIRED_MSG,false,$birthday);
+        } else {
+            $validationResult = new ValidationResult(self::DATE_ERROR_NONE_MSG,true,$birthday);
+        }
+        return $validationResult;
+    }
+
     /**
      *  foreach($userValidation->getErrors() as $error ){
      *   echo "<li</li>"
@@ -100,5 +118,19 @@ class UserValidation {
     {
         return $this->errors[$errorKey];
     }
+
+
+    /**
+     * Get the value of isValid
+     */ 
+    public function getIsValid()
+    {
+        $this->isValid = true;
+        foreach ($this->errors as $validation){
+            $this->isValid = $this->isValid && $validation->getIsValid();
+        }
+        return $this->isValid;
+    }
+
 
 }
