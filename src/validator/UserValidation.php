@@ -126,7 +126,7 @@ class UserValidation {
     /**
      * Get the value of isValid
      */ 
-    public function getIsValid()
+    public function getIsValidForm()
     {
         $this->isValid = true;
         foreach ($this->errors as $validation){
