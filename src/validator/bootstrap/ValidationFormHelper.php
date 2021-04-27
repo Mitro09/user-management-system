@@ -1,4 +1,7 @@
 <?php
+namespace patrickmitrotti\usm\validator\bootstrap;
+
+use patrickmitrotti\usm\validator\ValidationResult;
 
 class ValidationFormHelper{
 

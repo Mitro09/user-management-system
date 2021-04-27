@@ -4,6 +4,7 @@
     + isValid: bool
     + value: any
  */
+namespace patrickmitrotti\usm\validator;
 class ValidationResult {
 
     public function __construct($message,$isValid,$value){

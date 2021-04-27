@@ -1,4 +1,7 @@
 <?php
+namespace patrickmitrotti\usm\validator;
+
+use patrickmitrotti\usm\entity\User;
 
 class UserValidation {
 

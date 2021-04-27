@@ -1,5 +1,8 @@
 <?php
+
+namespace patrickmitrotti\usm\entity;
 class User {
+
 
     private $userId;
     private $firstName;

@@ -1,5 +1,10 @@
 <?php
 
+namespace patrickmitrotti\usm\model;
+
+use patrickmitrotti\usm\entity\User;
+use \PDO;
+
 class UserModel
 {
 
