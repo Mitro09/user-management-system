@@ -25,6 +25,8 @@ if($_SERVER['REQUEST_METHOD']==='GET'){
 
 if($_SERVER['REQUEST_METHOD']==='POST'){
     $user = new User($_POST['firstName'],$_POST['lastName'],$_POST['email'],$_POST['birthday']);
+    /*$user = new User();
+    $user->setUser($_POST['firstName'],$_POST['lastName'],$_POST['email'],$_POST['birthday']);*/
     $userValidation = new UserValidation($user);
     $firstNameValidation = $userValidation->getError('firstName');
     $lastNameValidation = $userValidation->getError('lastName');
@@ -39,7 +41,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     if($userValidation->getIsValidForm()){
         $userModel = new UserModel();
         $userModel->create($user);
-        header('location: list_users.php');
+        header('location: add_user_form.php');
 
     }
    }

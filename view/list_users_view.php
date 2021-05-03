@@ -12,18 +12,20 @@
                 <th>action</th>
             </tr>
 
-            
-            <tr>
-                <td>10</td>
-                <td>Roberto</td>
-                <td>Rossi</td>
-                <td>
-                    <a href="#" class="btn btn-secondary">edit</a>
-                    <a href="delete_user.php?user_id=10" class="btn btn-danger">delete</a>
-                </td>
-            </tr>
+            <?php foreach($users as $user){ ?>
+                <tr>
+                    <td><?= $user->getUserId() ?></td>
+                    <td><?= $user->getFirstName() ?></td>
+                    <td><?= $user->getLastName() ?></td>
+                    <td>
+                        <a href="edit_user.php?user_id=<?=$user->getUserId()?>" class="btn btn-secondary">edit </a>
+                        <a href="delete_user.php?user_id=<?= $user->getUserId() ?>" class="btn btn-danger">delete </a>
+                    </td>
+                </tr>
+            <?php } ?>
+
         </table>
-        
+        <a href="./add_user_form.php" class="btn btn-secondary">Back </a>
     </div>
 
 </body>

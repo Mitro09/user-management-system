@@ -2,6 +2,7 @@
 
 namespace patrickmitrotti\usm\model;
 
+use Error;
 use patrickmitrotti\usm\entity\User;
 use \PDO;
 
@@ -44,11 +45,46 @@ class UserModel
 
     public function read()
     {
+        $sql = "select * from User;";
+        $pdostm = $this->conn->prepare($sql);
+        $pdostm->execute();
+        return $pdostm->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,User::class,['','','','']);
+    
     }
-    public function update()
-    {
+
+    public function readOne($user_id){
+        $sql = "select * from user where userId=:$user_id;";
+        $pdostm = $this->conn->prepare($sql);
+        $pdostm->execute();
+        return $pdostm->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,User::class,['','','','']);
     }
-    public function delete()
+    public function update(User $user)
     {
+        $sql = "uptate user set firstName = :newFirstName
+                                lastName = :newLastName
+                                email = :newEmail
+                                where userId=:user_id;";
+        $pdostm = $this->conn->prepare($sql);
+        $pdostm->bindValue(':firstName', $user->getFirstName(), PDO::PARAM_STR);
+        $pdostm->bindValue(':lastName', $user->getLastName(), PDO::PARAM_STR);
+        $pdostm->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
+        $pdostm->bindValue(':user:id',$user->getUserId(),PDO::PARAM_INT);
+        $pdostm->execute();
+    }
+    public function delete($user_id)
+    {
+        $sql = "delete from user where userID=:user_id;";
+        $pdostm = $this->conn->prepare($sql);
+        $pdostm->bindValue(':user_id',$user_id,PDO::PARAM_INT);
+        $pdostm->execute();
+        if($pdostm->rowCount()===0){
+            return false;
+        }
+        else if($pdostm->rowCount()===1){
+            return true;
+        }
+        else{
+            throw new Error("ERRORE NEL DB");
+        }
     }
 }
