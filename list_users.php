@@ -1,5 +1,5 @@
 <?php
-
+require "./_autoload.php";
 use patrickmitrotti\usm\entity\User;
 
 try {
