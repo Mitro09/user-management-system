@@ -1,7 +1,7 @@
 <?php include __DIR__."/head.php"?>
 <?php include __DIR__."/header.php"?>
     <div class="container">
-        <form action="add_user_form.php" method="POST">
+        <form action="edit_user.php" method="POST">
             <div class="form-group">
                <label for="">Nome</label>
                <!-- is-invalid  -->
@@ -35,7 +35,18 @@
                 <div class="<?=$emailClassMessage?>">
                     <?=$emailMessage?>
                 </div>
+                <div class="form-group">
+                <label for="">data di nascita</label>
+                <input value="<?=$birthday?>"
+                       class="form-control <?=$birthdayClass?>" 
+                       name="birthday" 
+                       type="date"
+                >
+                <div class="<?=$birthdayClassMessage?>">
+                    <?=$birthdayMessage?>
+                </div>
              </div>
-             <button class="btn btn-primary mt-3" type="submit">Aggiungi</button>
+             <input type="text" name="user_id" value="<?= $userId ?>" class="form-control">
+             <button class="btn btn-primary mt-3" type="submit">Modifica</button>
         </form>
     </div>

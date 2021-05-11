@@ -53,23 +53,37 @@ class UserModel
     }
 
     public function readOne($user_id){
-        $sql = "select * from user where userId=:$user_id;";
+        $sql = "select * from user where userId=:user_id;";
         $pdostm = $this->conn->prepare($sql);
+        $pdostm->bindValue(':user_id',$user_id,PDO::PARAM_INT);
         $pdostm->execute();
-        return $pdostm->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,User::class,['','','','']);
+        $result = $pdostm->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,User::class,['','','','']);
+        return count($result) === 0 ? null : $result[0];
+
     }
     public function update(User $user)
     {
-        $sql = "uptate user set firstName = :newFirstName
-                                lastName = :newLastName
-                                email = :newEmail
+        $sql = "UPDATE user set firstName = :firstName
+                                lastName = :lastName
+                                email = :email
+                                birthday = :birthday
                                 where userId=:user_id;";
         $pdostm = $this->conn->prepare($sql);
         $pdostm->bindValue(':firstName', $user->getFirstName(), PDO::PARAM_STR);
         $pdostm->bindValue(':lastName', $user->getLastName(), PDO::PARAM_STR);
         $pdostm->bindValue(':email', $user->getEmail(), PDO::PARAM_STR);
-        $pdostm->bindValue(':user:id',$user->getUserId(),PDO::PARAM_INT);
+        $pdostm->bindValue(':birthday',$user->getBirthday(),PDO::PARAM_STR);
+        $pdostm->bindValue(':user_id',$user->getUserId());
         $pdostm->execute();
+        if($pdostm->rowCount()===0){
+            return false;
+        }
+        else if($pdostm->rowCount()===1){
+            return true;
+        }
+        else{
+            throw new Error("ERRORE NEL DB");
+        }
     }
     public function delete($user_id)
     {
